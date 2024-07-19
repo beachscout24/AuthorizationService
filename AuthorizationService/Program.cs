@@ -13,14 +13,6 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddDbContext<DataContext>((serviceProvider, dbContextBuilder) =>
-        {
-            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-            var connectionStringName = httpContextAccessor.HttpContext.Request.Headers["db"].First();
-            var connectionString = Environment.GetEnvironmentVariable(connectionStringName);
-            dbContextBuilder.UseSqlServer(connectionString);
-        });
     })
     .Build();
 host.Run();
